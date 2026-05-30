@@ -1,27 +1,88 @@
-abstract class FoodOrder1 {
-    abstract void showMenu();
-    abstract void printBill(int qty);
+class Food {
+    private String name;
+    private int price;
+    Food(String name, int price) {
+        this.name = name;
+        this.price = price;
+    }
+    String getName() {
+        return name;
+    }
+    int getPrice() {
+        return price;
+    }
 }
-class Swiggy1 extends FoodOrder1{
-    int price;
-    Swiggy1(int price){
-        this.price=price;
+abstract class OrderSystem {
+    abstract void displayMenu();
+    abstract void addItem(String item);
+    abstract void generateBill();
+}
+class FoodOrder2 extends OrderSystem {
+    private Food[] menu;
+    private Food[] orders;
+    private int orderCount;
+    FoodOrder2() {
+        menu = new Food[10];
+        menu[0] = new Food("Chicken Biryani", 120);
+        menu[1] = new Food("Egg Biryani", 100);
+        menu[2] = new Food("Veg Biryani", 90);
+        menu[3] = new Food("Mutton Biryani", 180);
+        menu[4] = new Food("Pizza", 250);
+        menu[5] = new Food("Burger", 150);
+        menu[6] = new Food("Fried Rice", 130);
+        menu[7] = new Food("Chicken Mandi", 500);
+        menu[8] = new Food("Ice Cream", 60);
+        menu[9] = new Food("Cool Drinks", 40);
+        orders = new Food[20];
+        orderCount = 0;
     }
     @Override
-    void showMenu() {
+    void displayMenu() {
         System.out.println("----- MENU -----");
-        System.out.println("1. Burger - Rs.120");
+        for (int i = 0; i < menu.length; i++) {
+            System.out.println(menu[i].getName() + " : Rs." + menu[i].getPrice());
+        }
     }
-
     @Override
-    void printBill(int qty) {
-        System.out.println("Bill Amount = Rs." + (price * qty));
+    void addItem(String item) {
+        boolean found = false;
+        for (int i = 0; i < menu.length; i++) {
+            if (menu[i].getName().equalsIgnoreCase(item)) {
+                found = true;
+                if (orderCount < orders.length) {
+                    orders[orderCount] = menu[i];
+                    orderCount++;
+                    System.out.println(item + " added successfully.");
+                } else {
+                    System.out.println("Order cart is full!");
+                }
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Item not available.");
+        }
+    }
+    @Override
+    void generateBill() {
+        int total = 0;
+        System.out.println("\n----- BILL -----");
+        for (int i = 0; i < orderCount; i++) {
+            System.out.println(orders[i].getName() + " : Rs." + orders[i].getPrice());
+            total += orders[i].getPrice();
+        }
+        System.out.println("Total Amount = Rs." + total);
     }
 }
-class SwiggyFoodOrder {
+public class SwiggyFoodOrder {
     public static void main(String[] args) {
-        Swiggy1 s1 = new Swiggy1(120);
-        s1.showMenu();
-        s1.printBill(2);
+        OrderSystem order = new FoodOrder2();
+        order.displayMenu();
+        System.out.println();
+        order.addItem("Chicken Biryani");
+        order.addItem("Pizza");
+        order.addItem("Cool Drinks");
+        order.addItem("Ice Cream");
+        order.generateBill();
     }
 }

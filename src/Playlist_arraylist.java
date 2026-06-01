@@ -21,5 +21,8 @@ public class Playlist_arraylist {
         {
             System.out.println(s+" ");
         }
+        System.out.println();
+        Collections.sort(Playlist);
+        System.out.println("After sorting: "+Playlist);
     }
 }
